@@ -1,0 +1,6 @@
+@CleanArthitecture_KuyumcuApp.WebAPI_HostAddress = http://localhost:5137
+
+GET {{CleanArthitecture_KuyumcuApp.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
