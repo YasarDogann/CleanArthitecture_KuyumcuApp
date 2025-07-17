@@ -16,10 +16,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.7" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CleanArthitecture_KuyumcuApp.Application\CleanArthitecture_KuyumcuApp.Application.csproj" />
     <ProjectReference Include="..\CleanArthitecture_KuyumcuApp.Domain\CleanArthitecture_KuyumcuApp.Domain.csproj" />
   </ItemGroup>
 

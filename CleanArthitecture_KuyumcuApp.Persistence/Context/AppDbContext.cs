@@ -4,10 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace CleanArthitecture_KuyumcuApp.Persistence.Context;
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
-    {
-    }
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {}
 
     // Tabloları temsil eder : DbSet<T>
     public DbSet<Product> Products => Set<Product>();
