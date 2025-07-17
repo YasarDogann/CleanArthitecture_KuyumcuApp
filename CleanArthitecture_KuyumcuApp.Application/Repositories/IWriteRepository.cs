@@ -12,4 +12,6 @@ public interface IWriteRepository<T> : IRepository<T> where T : BaseEntity
     bool RemoveRange(List<T> entities);               // Toplu silme işlemi
     bool Update(T entity);                            // Güncelleme
     Task<int> SaveAsync();                            // Değişiklikleri kyaıt eder
+    //Task<bool> UpdateAsync(T entity);     
+    //Task<bool> DeleteAsync(string id);
 }
