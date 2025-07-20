@@ -1,4 +1,5 @@
 ﻿using CleanArthitecture_KuyumcuApp.Application.Abstractions.Services;
+using CleanArthitecture_KuyumcuApp.Application.Common;
 using CleanArthitecture_KuyumcuApp.Application.Repositories;
 using CleanArthitecture_KuyumcuApp.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -26,22 +27,36 @@ public class CustomerService : ICustomerService
         return await _customerReadRepository.GetByIdAsync(id);
     }
 
-    public async Task<bool> AddCustomerAsync(Customer customer)
+    public async Task<ServiceResponse> AddCustomerAsync(Customer customer)
     {
-        var result = await _customerWriteRepository.AddAsync(customer);
+        if (customer is null)
+            return ServiceResponse.Fail("Müşteri bilgisi boş olamaz.");
+
+        await _customerWriteRepository.AddAsync(customer);
         await _customerWriteRepository.SaveAsync();
-        return result;
+        return ServiceResponse.Ok("Müşteri başarıyla eklendi.");
     }
-    public async Task<bool> UpdateCustomerAsync(Customer customer)
+    public async Task<ServiceResponse> UpdateCustomerAsync(Customer customer)
     {
-        var result = _customerWriteRepository.Update(customer);
+        if (customer is null)
+            return ServiceResponse.Fail("Müşteri bilgisi eksik.");
+
+        var existing = await _customerReadRepository.GetByIdAsync(customer.Id.ToString());
+        if (existing == null)
+            return ServiceResponse.Fail("Güncellenecek müşteri bulunamadı.");
+
+        _customerWriteRepository.Update(customer);
         await _customerWriteRepository.SaveAsync();
-        return result;
+        return ServiceResponse.Ok("Müşteri güncellendi.");
     }
-    public async Task<bool> DeleteCustomerAsync(string id)
+    public async Task<ServiceResponse> DeleteCustomerAsync(string id)
     {
-        var result = await _customerWriteRepository.RemoveAsync(id);
+        var customer = await _customerReadRepository.GetByIdAsync(id);
+        if (customer is null)
+            return ServiceResponse.Fail("Silinecek müşteri bulunamadı.");
+
+        _customerWriteRepository.Remove(customer);
         await _customerWriteRepository.SaveAsync();
-        return result;
+        return ServiceResponse.Ok("Müşteri silindi.");
     }
 }

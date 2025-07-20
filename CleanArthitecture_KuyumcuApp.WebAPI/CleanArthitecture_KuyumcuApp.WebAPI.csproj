@@ -21,8 +21,4 @@
     <ProjectReference Include="..\CleanArthitecture_KuyumcuApp.ServiceDefaults\CleanArthitecture_KuyumcuApp.ServiceDefaults.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

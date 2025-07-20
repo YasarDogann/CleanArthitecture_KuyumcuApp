@@ -1,3 +1,4 @@
+using CleanArthitecture_KuyumcuApp.Application.Features.Commands.Category.CreateCategory;
 using CleanArthitecture_KuyumcuApp.Persistence.ServiceRegistration;
 using Microsoft.Extensions.Configuration;
 
@@ -7,7 +8,8 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddPersistenceServices(builder.Configuration);
-
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(CreateCategoryCommandRequest).Assembly));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

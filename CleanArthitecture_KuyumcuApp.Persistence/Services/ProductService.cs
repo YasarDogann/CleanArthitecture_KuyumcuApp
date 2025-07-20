@@ -1,4 +1,5 @@
 ﻿using CleanArthitecture_KuyumcuApp.Application.Abstractions.Services;
+using CleanArthitecture_KuyumcuApp.Application.Common;
 using CleanArthitecture_KuyumcuApp.Application.Repositories;
 using CleanArthitecture_KuyumcuApp.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -22,18 +23,38 @@ public class ProductService : IProductService
     {
         return await _productReadRepository.GetByIdAsync(id);
     }
-    public async Task<bool> AddProductAsync(Product product)
+    public async Task<ServiceResponse> AddProductAsync(Product product)
     {
-        return await _productWriteRepository.AddAsync(product);
-    }
-    //public  async Task<bool> UpdateProductAsync(Product product)
-    //{
-    //    return await _productWriteRepository.UpdateAsync(product);
-    //}
+        if (product == null)
+            return ServiceResponse.Fail("Ürün bilgisi boş olamaz.");
 
-    //public  async Task<bool> DeleteProductAsync(string id)
-    //{
-    //    return await _productWriteRepository.DeleteAsync(id);
-    //}
+        await _productWriteRepository.AddAsync(product);
+        await _productWriteRepository.SaveAsync();
+        return ServiceResponse.Ok("Ürün başarıyla eklendi."); ;
+    }
+    public async Task<ServiceResponse> UpdateProductAsync(Product product)
+    {
+        if (product == null)
+            return ServiceResponse.Fail("Ürün bilgisi eksik.");
+
+        var existing = await _productReadRepository.GetByIdAsync(product.Id.ToString());
+        if (existing == null)
+            return ServiceResponse.Fail("Güncellenecek ürün bulunamadı.");
+
+        _productWriteRepository.Update(product);
+        await _productWriteRepository.SaveAsync();
+        return ServiceResponse.Ok("Ürün güncellendi.");
+    }
+
+    public async Task<ServiceResponse> DeleteProductAsync(string id)
+    {
+        var product = await _productReadRepository.GetByIdAsync(id);
+        if (product == null)
+            return ServiceResponse.Fail("Silinecek ürün bulunamadı.");
+
+        _productWriteRepository.Remove(product);
+        await _productWriteRepository.SaveAsync();
+        return ServiceResponse.Ok("Ürün silindi.");
+    }
 
 }
